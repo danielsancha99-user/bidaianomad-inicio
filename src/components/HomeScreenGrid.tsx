@@ -36,7 +36,7 @@ const IMG_CONTAIN: CSSProperties = { width: '100%', height: '100%', objectFit: '
 /** Icono de app tipo iOS: pastilla blanca redondeada con el logo dentro (object-contain). */
 function AppImageIcon({ src }: { src: string }) {
   return (
-    <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-[calc(20px*0.81)] bg-white p-[7px] shadow-[0_8px_20px_rgba(0,0,0,0.16)]">
+    <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-[calc(20px*0.81)] bg-white p-[10px] shadow-[0_8px_20px_rgba(0,0,0,0.16)]">
       <img src={src} alt="" draggable={false} style={IMG_CONTAIN} />
     </div>
   );

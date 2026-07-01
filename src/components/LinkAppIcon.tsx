@@ -3,9 +3,9 @@ import type { ComponentProps } from 'react';
 export const appIconShellClassName =
   'flex h-[calc(74px*0.81)] w-[calc(74px*0.81)] shrink-0 items-center justify-center overflow-hidden rounded-[calc(20px*0.81)] bg-white/90 shadow-[0_8px_20px_rgba(0,0,0,0.22)] [&_svg]:h-full [&_svg]:w-full [&_img]:h-full [&_img]:w-full [&_img]:object-cover [&_img]:border-0';
 
-/** Mismo tamaño que la shell, sin recuadro ni sombra (p. ej. PNG con transparencia). */
+/** Mismo tamaño que la shell, sin recuadro ni sombra (el hijo controla su propio recorte/relleno). */
 const appIconBareClassName =
-  'flex h-[calc(74px*0.81)] w-[calc(74px*0.81)] shrink-0 items-center justify-center overflow-hidden [&_svg]:h-full [&_svg]:w-full [&_img]:h-full [&_img]:w-full [&_img]:border-0 [&_img]:object-cover';
+  'flex h-[calc(74px*0.81)] w-[calc(74px*0.81)] shrink-0 items-center justify-center';
 
 /** Ancho de una fila de N apps respecto al `gap-2` / `md:gap-3` del grid (iconos centrados en celda). */
 export const widgetAlignWidthClass = {
