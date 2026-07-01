@@ -44,7 +44,7 @@ export default function LinkAppIcon({
       {...anchorProps}
     >
       <div className={`${frameClass} transition-transform duration-200 group-active:scale-95`}>{icon}</div>
-      <span className="shrink-0 text-center text-[12px] font-medium leading-none text-white/75">
+      <span className="shrink-0 text-center text-[12px] font-medium leading-none text-neutral-800">
         {label}
       </span>
     </a>

@@ -28,44 +28,46 @@ const MOBILE_FEATURED_ICON_SIZE = MOBILE_APPS_ROW_HEIGHT + MOBILE_GRID_GAP + MOB
 const HOME_LINKS: Record<AppSlotId, string> = {
   acceso: HOME_APPS.acceso.href,
   projects: HOME_APPS.projects.href,
-  asesoria: HOME_APPS.asesoria.href,
   contacto: HOME_APPS.contacto.href,
 };
 
-/** Marcador de posición para iconos aún sin diseño (se añaden más adelante). */
-function BlankAppIcon() {
+const IMG_CONTAIN: CSSProperties = { width: '100%', height: '100%', objectFit: 'contain' };
+
+/** Icono de app tipo iOS: pastilla blanca redondeada con el logo dentro (object-contain). */
+function AppImageIcon({ src }: { src: string }) {
   return (
-    <div className="h-full w-full rounded-[calc(20px*0.81)] border border-white/10 bg-[#131b28] shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_8px_20px_rgba(0,0,0,0.4)]" />
+    <div className="flex h-full w-full items-center justify-center rounded-[calc(20px*0.81)] bg-white p-[6px] shadow-[0_8px_20px_rgba(0,0,0,0.16)]">
+      <img src={src} alt="" draggable={false} style={IMG_CONTAIN} />
+    </div>
   );
 }
 
 /** Carpeta de Proyectos (vacía por ahora). */
 function ProjectsFolderMiniIcon() {
   return (
-    <div className="h-full w-full rounded-[calc(20px*0.81)] border border-white/10 bg-[#131b28] p-[6px] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
-      <div className="grid h-full w-full grid-cols-3 grid-rows-3 gap-[3px] rounded-[14px] bg-white/[0.04] p-[5px]">
+    <div className="h-full w-full rounded-[calc(20px*0.81)] border border-black/10 bg-[hsla(var(--dock-bg))] p-[6px] shadow-[inset_0_1px_0_rgba(255,255,255,0.42)] backdrop-blur-[20px]">
+      <div className="grid h-full w-full grid-cols-3 grid-rows-3 gap-[3px] rounded-[14px] bg-white/25 p-[5px]">
         {Array.from({ length: 9 }).map((_, i) => (
-          <div key={i} className="rounded-[4px] bg-white/[0.05]" />
+          <div key={i} className="rounded-[4px] bg-white/45" />
         ))}
       </div>
     </div>
   );
 }
 
-/** Tile de la app grande (web personal). Sin logo por ahora: acabado premium turquesa. */
+/** Tile de la app grande (web personal). */
 function FeaturedAppTile() {
   return (
-    <div className="absolute inset-0 overflow-hidden rounded-[26px] border border-white/10 bg-[#0f1621]">
-      <div className="absolute inset-0 bg-[radial-gradient(120%_100%_at_18%_0%,rgba(0,178,214,0.32),transparent_58%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(90%_80%_at_100%_100%,rgba(0,178,214,0.12),transparent_60%)]" />
-      <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/45 to-transparent" />
+    <div className="flex h-full w-full items-center justify-center rounded-[26px] bg-white p-4 shadow-[0_14px_30px_rgba(0,0,0,0.12)]">
+      <img src={FEATURED_APP.iconSrc} alt="" draggable={false} style={IMG_CONTAIN} />
     </div>
   );
 }
 
 function appIconFor(id: AppSlotId): ReactNode {
   if (id === 'projects') return <ProjectsFolderMiniIcon />;
-  return <BlankAppIcon />;
+  if (id === 'acceso') return <AppImageIcon src={HOME_APPS.acceso.iconSrc} />;
+  return <AppImageIcon src={HOME_APPS.contacto.iconSrc} />;
 }
 
 function appMeta(id: AppSlotId): { label: string; bare?: boolean } {
@@ -78,10 +80,10 @@ type AppDragPreviewProps = Readonly<{ appId: AppSlotId }>;
 function AppDragPreview({ appId }: AppDragPreviewProps) {
   return (
     <>
-      <div className="flex h-[calc(74px*0.81)] w-[calc(74px*0.81)] shrink-0 items-center justify-center overflow-hidden [&_svg]:h-full [&_img]:h-full [&_img]:w-full [&_img]:object-cover">
+      <div className="flex h-[calc(74px*0.81)] w-[calc(74px*0.81)] shrink-0 items-center justify-center overflow-hidden">
         {appIconFor(appId)}
       </div>
-      <span className="text-[12px] font-medium leading-none text-white/85">
+      <span className="text-[12px] font-medium leading-none text-neutral-800">
         {appMeta(appId).label}
       </span>
     </>
@@ -382,6 +384,7 @@ export default function HomeScreenGrid() {
           iconSizeMobilePx={MOBILE_FEATURED_ICON_SIZE}
           icon={<FeaturedAppTile />}
         />
+
         {allowedCells.map((pos) => {
           const k = posKey(pos);
           const occupant = appByCell.get(k);
@@ -433,6 +436,23 @@ export default function HomeScreenGrid() {
             </div>
           );
         })}
+
+        {/* App ancha (2 columnas) debajo de Contacto: nombre en una sola línea. */}
+        <a
+          href={HOME_APPS.asesoria.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={HOME_APPS.asesoria.label}
+          data-testid="app-asesoria-link"
+          className="group col-start-1 col-span-2 row-start-5 flex h-full min-h-0 flex-col items-center justify-start gap-2 self-start px-1"
+        >
+          <div className="h-[calc(74px*0.81)] w-[calc(74px*0.81)] shrink-0 transition-transform duration-200 group-active:scale-95">
+            <AppImageIcon src={HOME_APPS.asesoria.iconSrc} />
+          </div>
+          <span className="w-full whitespace-nowrap text-center text-[11px] font-medium leading-none text-neutral-800">
+            {HOME_APPS.asesoria.label}
+          </span>
+        </a>
       </div>
       </div>
 
@@ -446,7 +466,7 @@ export default function HomeScreenGrid() {
                 e.preventDefault();
                 setIsProjectsFolderOpen(false);
               }}
-              className="pointer-events-auto absolute inset-0 z-[120] m-0 flex h-full max-h-none w-full max-w-none items-center justify-center rounded-[34px] border-0 bg-black/45 p-0 backdrop-blur-[24px] transition-opacity duration-220 [-webkit-backdrop-filter:blur(24px)]"
+              className="pointer-events-auto absolute inset-0 z-[120] m-0 flex h-full max-h-none w-full max-w-none items-center justify-center rounded-[34px] border-0 bg-black/25 p-0 backdrop-blur-[24px] transition-opacity duration-220 [-webkit-backdrop-filter:blur(24px)]"
             >
               <div
                 className="flex w-full max-w-[320px] flex-col items-center px-2 transition-transform duration-220 translate-y-0 scale-100"
@@ -454,21 +474,21 @@ export default function HomeScreenGrid() {
               >
                 <p
                   id="projects-folder-title"
-                  className="mb-5 w-full text-left text-[30px] font-bold text-white/85"
+                  className="mb-5 w-full text-left text-[30px] font-bold text-white/80"
                 >
                   Proyectos
                 </p>
-                <div className="dock-glass h-[min(320px,calc(100vw-2rem))] w-[min(320px,calc(100vw-2rem))] rounded-[30px] border border-white/15 shadow-[0_18px_42px_rgba(0,0,0,0.5)] backdrop-blur-[24px]">
+                <div className="dock-glass h-[min(320px,calc(100vw-2rem))] w-[min(320px,calc(100vw-2rem))] rounded-[30px] border border-white/40 shadow-[0_18px_42px_rgba(0,0,0,0.28)] backdrop-blur-[24px]">
                   <div className="grid h-full w-full place-items-center px-4 pb-3 pt-1">
                     {PROJECTS.length === 0 ? (
                       <div
                         className="flex flex-col items-center justify-center gap-2 px-6 text-center"
                         data-testid="projects-empty-state"
                       >
-                        <p className="text-sm font-semibold text-white/75">Aún no hay proyectos</p>
-                        <p className="text-xs leading-relaxed text-white/45">
+                        <p className="text-sm font-semibold text-neutral-800">Aún no hay proyectos</p>
+                        <p className="text-xs leading-relaxed text-neutral-500">
                           Añade los tuyos (icono, nombre y enlace) desde{' '}
-                          <span className="text-[#4fd8f2]">siteConfig.ts</span>.
+                          <span className="font-medium text-neutral-700">siteConfig.ts</span>.
                         </p>
                       </div>
                     ) : (
@@ -481,7 +501,7 @@ export default function HomeScreenGrid() {
                             rel="noopener noreferrer"
                             className="flex h-[82px] w-[72px] flex-col items-center justify-start gap-1 rounded-xl p-1.5 transition-colors hover:bg-white/10"
                           >
-                            <div className="h-[56px] w-[56px] shrink-0 overflow-hidden rounded-[13px] border border-white/10 shadow-[0_6px_14px_rgba(0,0,0,0.35)]">
+                            <div className="h-[56px] w-[56px] shrink-0 overflow-hidden rounded-[13px] bg-white shadow-[0_6px_14px_rgba(0,0,0,0.2)]">
                               {project.iconSrc ? (
                                 <img
                                   src={project.iconSrc}
@@ -490,13 +510,13 @@ export default function HomeScreenGrid() {
                                   height={128}
                                   decoding="async"
                                   draggable={false}
-                                  className="size-full object-cover"
+                                  className="size-full object-contain"
                                 />
                               ) : (
-                                <div className="h-full w-full bg-[#131b28]" />
+                                <div className="h-full w-full bg-white" />
                               )}
                             </div>
-                            <span className="text-[10px] font-medium leading-none text-white/80">
+                            <span className="text-[10px] font-medium leading-none text-neutral-800">
                               {project.label}
                             </span>
                           </a>

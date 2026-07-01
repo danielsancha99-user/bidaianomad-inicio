@@ -7,9 +7,9 @@ export const GRID_COLS = 4;
  */
 export const CSS_DESKTOP_HOME_APP_ROW_HEIGHT = 'calc(74px * 0.81 + 0.5rem + 12px)';
 
-export type AppSlotId = 'acceso' | 'projects' | 'asesoria' | 'contacto';
+export type AppSlotId = 'acceso' | 'projects' | 'contacto';
 
-const APP_SLOT_COUNT = 4;
+const APP_SLOT_COUNT = 3;
 
 export type CellPos = { row: number; col: number };
 
@@ -17,11 +17,11 @@ export function posKey(p: CellPos): string {
   return `${p.row},${p.col}`;
 }
 
-/** Celdas donde pueden vivir apps (0-based). Filas 1–2 = perfil; (fila 3–4, col 3–4) = app grande. */
+/** Celdas donde pueden vivir apps arrastrables (0-based): filas 3–4 (index 2–3), columnas 1–2 (index 0–1). */
 export function isAppCellAllowed(row: number, col: number): boolean {
   if (row < 0 || row >= GRID_ROWS || col < 0 || col >= GRID_COLS) return false;
-  if (row < 2) return false;
-  if (row <= 3 && col >= 2) return false;
+  if (row < 2 || row > 3) return false;
+  if (col >= 2) return false;
   return true;
 }
 
@@ -39,8 +39,7 @@ export function getInitialPositions(): Record<AppSlotId, CellPos> {
   return {
     acceso: { row: 2, col: 0 },
     projects: { row: 2, col: 1 },
-    asesoria: { row: 3, col: 0 },
-    contacto: { row: 3, col: 1 },
+    contacto: { row: 3, col: 0 },
   };
 }
 
@@ -156,7 +155,7 @@ export function positionsAreValid(positions: Record<AppSlotId, CellPos>): boolea
   return true;
 }
 
-const STORAGE_KEY = 'bidaia-os-home-app-positions';
+const STORAGE_KEY = 'bidaia-os-home-app-positions-v2';
 
 function parseStoredPositions(raw: string): Record<AppSlotId, CellPos> | null {
   const parsed = JSON.parse(raw) as Record<AppSlotId, CellPos>;

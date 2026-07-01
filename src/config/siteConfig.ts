@@ -12,8 +12,7 @@ export const SITE = {
     lastName: 'Sancha',
     subtitle: 'Creador de BidaiaNomad · Asesoría de Viajes',
     badge: 'Viajes auténticos',
-    /** Vacío por ahora → se muestran las iniciales. Añade una ruta a /public para usar foto. */
-    avatarImage: '',
+    avatarImage: '/daniel.png',
   },
 } as const;
 
@@ -33,14 +32,19 @@ export const EXTERNAL_LINKS = {
 export const FEATURED_APP = {
   label: 'BidaiaNomad',
   href: EXTERNAL_LINKS.web,
+  iconSrc: '/app-icons/bidaianomad.png',
 } as const;
 
 /** Apps del grid del home (además de la app grande y del dock inferior). */
 export const HOME_APPS = {
-  acceso: { label: 'Acceso Clientes', href: EXTERNAL_LINKS.clientes },
+  acceso: { label: 'Acceso Clientes', href: EXTERNAL_LINKS.clientes, iconSrc: '/app-icons/acceso.png' },
   projects: { label: 'Proyectos', href: '#' },
-  asesoria: { label: 'Quiero un viaje personalizado', href: EXTERNAL_LINKS.asesoria },
-  contacto: { label: 'Contacto', href: EXTERNAL_LINKS.contacto },
+  asesoria: {
+    label: 'Quiero un viaje personalizado',
+    href: EXTERNAL_LINKS.asesoria,
+    iconSrc: '/app-icons/asesoria.png',
+  },
+  contacto: { label: 'Contacto', href: EXTERNAL_LINKS.contacto, iconSrc: '/app-icons/contacto.png' },
 } as const;
 
 /** Iconos del dock inferior (los únicos con icono real por ahora). */

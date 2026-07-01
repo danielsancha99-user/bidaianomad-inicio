@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,13 +6,13 @@
 
 @layer base {
   :root {
-    --background: 222 45% 4%;
-    --foreground: 0 0% 96%;
-    --card: 220 30% 10%;
-    --muted: 220 20% 16%;
+    --background: 30 20% 98%;
+    --foreground: 0 0% 10%;
+    --card: 0 0% 100%;
+    --muted: 30 10% 95%;
     --primary: 190 100% 42%;
-    --border: 220 20% 18%;
-    --dock-bg: 220 32% 9% / 0.55;
+    --border: 30 15% 88%;
+    --dock-bg: 0 0% 100% / 0.55;
   }
 
   * {

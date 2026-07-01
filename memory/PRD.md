@@ -12,15 +12,15 @@ Rebrand del repositorio existente (Travel/Links OS: React + TypeScript + Vite + 
 `src/config/siteConfig.ts` — único punto de edición: header (nombre/subtítulo/badge/avatar), EXTERNAL_LINKS, FEATURED_APP (web), HOME_APPS (grid), DOCK_ITEMS, PROJECTS (vacío).
 
 ## Implementado (2026-07-01)
-- Header "Sobre Mí": Daniel Sancha · "Creador de BidaiaNomad · Asesoría de Viajes" · badge "Viajes auténticos" · avatar iniciales "DS" (sin foto todavía).
-- App grande: **BidaiaNomad** → https://bidaianomad.com/
-- Grid: Acceso Clientes (vercel app), Proyectos (carpeta vacía funcional), "Quiero un viaje personalizado" (asesoría #formulario-contacto), Contacto.
-- Dock: Instagram, TikTok, WhatsApp, Newsletter (icono gmail → contacto/#formulario-newsletter). Iconos reales conservados solo para estos 4.
-- Iconos del grid en blanco (placeholder premium) a la espera de arte definitivo.
-- Estética: fondo oscuro (#0A0E17), acento turquesa #00B2D6, tipografía Manrope, glow radial, glass dock.
-- Eliminado: YouTube, LinkedIn, Terminal, Adviento, Vibe Coding, Zero2Hero, On Anem, foto-joana, sa/onanem/zero2hero assets, saCommunity, adventDays, socialLinks. Sin rastro de Joana.
-- Preservado: drag & drop (long-press), navegación OS, animaciones iOS, responsive mobile-first, carpeta Proyectos.
-- Verificado: build de producción OK (tsc + vite), servidor :3000 HTTP 200, render visual confirmado por screenshot.
+- Header "Sobre Mí": Daniel Sancha · "Creador de BidaiaNomad · Asesoría de Viajes" · badge "Viajes auténticos" · foto real (/daniel.png).
+- App grande: **BidaiaNomad** (logo real) → https://bidaianomad.com/
+- Grid: Acceso Clientes (icono real), Proyectos (carpeta vacía funcional), Contacto (icono real). "Quiero un viaje personalizado" = app **ancha (2 columnas)** debajo de Contacto, nombre en 1 línea → asesoría #formulario-contacto.
+- Dock: Instagram, TikTok, WhatsApp, Newsletter (icono gmail → contacto/#formulario-newsletter).
+- Iconos reales descargados a /public/app-icons (acceso, bidaianomad, asesoria, contacto) y /public/daniel.png.
+- Estética: **estilo claro original restaurado** (fondo crema #E5DBCF, marco beige #B0ADA0, tarjeta perfil #3e3b36, tipografía Inter). Acento turquesa #00B2D6 solo en el badge.
+- Grid drag&drop restringido a filas 3–4 col 1–2 (3 iconos arrastrables). App ancha y grande son estáticas.
+- Eliminado: YouTube, LinkedIn, Terminal, Adviento, Vibe Coding, Zero2Hero, On Anem y todo rastro de Joana.
+- Verificado: build de producción OK (tsc + vite), :3000 HTTP 200, render visual confirmado.
 
 ## Backlog / Next actions (P1/P2)
 - Añadir iconos definitivos para BidaiaNomad, Acceso Clientes, Asesoría, Contacto (hoy placeholders en blanco por pedido del usuario).

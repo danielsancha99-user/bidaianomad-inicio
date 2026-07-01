@@ -50,8 +50,8 @@ export default function LinkWidget({
 
   const body =
     variant === 'profile' ? (
-      <div className="flex h-full min-h-0 w-full min-w-0 flex-1 items-center justify-start gap-7 rounded-[22px] border border-white/10 bg-[#0f1621] py-5 pl-5 pr-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_18px_40px_rgba(0,0,0,0.4)] max-md:gap-4 max-md:py-3 max-md:pl-4 max-md:pr-3">
-        <div className="size-[76px] shrink-0 overflow-hidden rounded-full border border-white/10 shadow-[0_1px_2px_rgba(0,0,0,0.35)] max-md:size-[62px]">
+      <div className="flex h-full min-h-0 w-full min-w-0 flex-1 items-center justify-start gap-7 rounded-[22px] bg-[#3e3b36] py-5 pl-5 pr-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] max-md:gap-4 max-md:py-3 max-md:pl-4 max-md:pr-3">
+        <div className="size-[76px] shrink-0 overflow-hidden rounded-full shadow-[0_1px_2px_rgba(0,0,0,0.12)] max-md:size-[62px]">
           {profileImage ? (
             <img
               src={profileImage}
@@ -75,7 +75,7 @@ export default function LinkWidget({
           >
             {firstName} {lastName}
           </p>
-          <p className="font-sans text-sm font-medium leading-snug text-white/55">
+          <p className="font-sans text-sm font-medium leading-snug text-white/50">
             {profileSubtitle}
           </p>
           <div className="mt-0.5 flex min-w-0 flex-wrap items-center gap-2">
@@ -95,8 +95,8 @@ export default function LinkWidget({
     <span
       className={
         variant === 'profile'
-          ? 'max-md:-mb-6 shrink-0 text-center text-xs font-medium leading-none text-white/70'
-          : 'link-widget-vibe-caption shrink-0 text-[12px] font-medium leading-none text-white/75 max-md:w-[var(--vibe-icon-size,128px)] max-md:self-end max-md:text-center'
+          ? 'max-md:-mb-6 shrink-0 text-center text-xs font-medium leading-none text-neutral-800'
+          : 'link-widget-vibe-caption shrink-0 text-[12px] font-medium leading-none text-neutral-800 max-md:w-[var(--vibe-icon-size,128px)] max-md:self-end max-md:text-center'
       }
     >
       {caption}
