@@ -36,7 +36,7 @@ const IMG_CONTAIN: CSSProperties = { width: '100%', height: '100%', objectFit: '
 /** Icono de app tipo iOS: pastilla blanca redondeada con el logo dentro (object-contain). */
 function AppImageIcon({ src }: { src: string }) {
   return (
-    <div className="flex h-full w-full items-center justify-center rounded-[calc(20px*0.81)] bg-white p-[6px] shadow-[0_8px_20px_rgba(0,0,0,0.16)]">
+    <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-[calc(20px*0.81)] bg-white p-[7px] shadow-[0_8px_20px_rgba(0,0,0,0.16)]">
       <img src={src} alt="" draggable={false} style={IMG_CONTAIN} />
     </div>
   );
@@ -394,7 +394,7 @@ export default function HomeScreenGrid() {
               ref={(el) => registerSlot(pos, el)}
               data-grid-row={pos.row}
               data-grid-col={pos.col}
-              className="relative flex h-full min-h-0 min-w-0 items-start justify-center md:items-end"
+              className="relative flex h-full min-h-0 min-w-0 items-start justify-center"
               style={{
                 gridRowStart: pos.row + 1,
                 gridColumnStart: pos.col + 1,
@@ -446,8 +446,8 @@ export default function HomeScreenGrid() {
           data-testid="app-asesoria-link"
           className="group col-start-1 col-span-2 row-start-5 flex h-full min-h-0 flex-col items-center justify-start gap-2 self-start px-1"
         >
-          <div className="h-[calc(74px*0.81)] w-[calc(74px*0.81)] shrink-0 transition-transform duration-200 group-active:scale-95">
-            <AppImageIcon src={HOME_APPS.asesoria.iconSrc} />
+          <div className="flex h-[calc(74px*0.81)] w-[calc(2*(74px*0.81)+0.5rem)] shrink-0 items-center justify-center overflow-hidden rounded-[calc(20px*0.81)] bg-white p-[9px] shadow-[0_8px_20px_rgba(0,0,0,0.16)] transition-transform duration-200 group-active:scale-95">
+            <img src={HOME_APPS.asesoria.iconSrc} alt="" draggable={false} style={IMG_CONTAIN} />
           </div>
           <span className="w-full whitespace-nowrap text-center text-[11px] font-medium leading-none text-neutral-800">
             {HOME_APPS.asesoria.label}

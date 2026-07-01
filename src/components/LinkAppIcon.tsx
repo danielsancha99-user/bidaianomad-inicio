@@ -40,7 +40,7 @@ export default function LinkAppIcon({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className={`group flex h-full min-h-0 flex-col items-center justify-start gap-2 md:justify-end ${className}`}
+      className={`group flex h-full min-h-0 flex-col items-center justify-start gap-2 ${className}`}
       {...anchorProps}
     >
       <div className={`${frameClass} transition-transform duration-200 group-active:scale-95`}>{icon}</div>
