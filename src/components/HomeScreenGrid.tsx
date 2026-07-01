@@ -4,6 +4,7 @@ import { createPortal } from 'react-dom';
 import LinkAppIcon from './LinkAppIcon';
 import LinkWidget from './LinkWidget';
 import { PHONE_INNER_SCREEN_ELEMENT_ID } from './PhoneFrame';
+import { FEATURED_APP, HOME_APPS, PROJECTS, SITE } from '../config/siteConfig';
 import {
   CSS_DESKTOP_HOME_APP_ROW_HEIGHT,
   getInitialPositions,
@@ -22,141 +23,72 @@ const MOBILE_PROFILE_ROW_HEIGHT = 74;
 const MOBILE_APPS_ROW_HEIGHT = 84;
 const MOBILE_GRID_GAP = 8;
 const MOBILE_APP_ICON_SIZE = 74 * 0.81;
-const MOBILE_VIBE_ICON_SIZE = MOBILE_APPS_ROW_HEIGHT + MOBILE_GRID_GAP + MOBILE_APP_ICON_SIZE;
+const MOBILE_FEATURED_ICON_SIZE = MOBILE_APPS_ROW_HEIGHT + MOBILE_GRID_GAP + MOBILE_APP_ICON_SIZE;
 
 const HOME_LINKS: Record<AppSlotId, string> = {
-  newsletter: 'https://www.elbackstage.com/',
-  terminal: 'https://terminal.joanacastello.com',
-  advent: '#',
-  projects: '#',
-  github: 'https://github.com/joanacastello',
-  soundcloud: 'https://soundcloud.com/joanacastello?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing',
-  edits: 'https://wa.me/34694206233',
+  acceso: HOME_APPS.acceso.href,
+  projects: HOME_APPS.projects.href,
+  asesoria: HOME_APPS.asesoria.href,
+  contacto: HOME_APPS.contacto.href,
 };
 
+/** Marcador de posición para iconos aún sin diseño (se añaden más adelante). */
+function BlankAppIcon() {
+  return (
+    <div className="h-full w-full rounded-[calc(20px*0.81)] border border-white/10 bg-[#131b28] shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_8px_20px_rgba(0,0,0,0.4)]" />
+  );
+}
+
+/** Carpeta de Proyectos (vacía por ahora). */
 function ProjectsFolderMiniIcon() {
   return (
-    <div className="h-full w-full rounded-[inherit] border border-black/10 bg-[hsla(var(--dock-bg))] p-[5px] shadow-[inset_0_1px_0_rgba(255,255,255,0.42)] backdrop-blur-[20px]">
-      <div className="grid h-full w-full grid-cols-3 grid-rows-3 gap-[2px] rounded-[17px] bg-white/12 p-[4px]">
-        <div className="col-start-1 row-start-1 aspect-square overflow-hidden rounded-[6px]">
-          <img
-            src="/zero2hero/zero2hero-icon.png"
-            alt=""
-            width={96}
-            height={96}
-            decoding="async"
-            draggable={false}
-            className="size-full aspect-square object-contain object-center"
-          />
-        </div>
-        <div className="col-start-2 row-start-1 aspect-square overflow-hidden rounded-[6px]">
-          <img
-            src="/onanem/onanem-icon.png"
-            alt=""
-            width={96}
-            height={96}
-            decoding="async"
-            draggable={false}
-            className="size-full aspect-square object-contain object-center"
-          />
-        </div>
+    <div className="h-full w-full rounded-[calc(20px*0.81)] border border-white/10 bg-[#131b28] p-[6px] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+      <div className="grid h-full w-full grid-cols-3 grid-rows-3 gap-[3px] rounded-[14px] bg-white/[0.04] p-[5px]">
+        {Array.from({ length: 9 }).map((_, i) => (
+          <div key={i} className="rounded-[4px] bg-white/[0.05]" />
+        ))}
       </div>
     </div>
   );
 }
 
+/** Tile de la app grande (web personal). Sin logo por ahora: acabado premium turquesa. */
+function FeaturedAppTile() {
+  return (
+    <div className="absolute inset-0 overflow-hidden rounded-[26px] border border-white/10 bg-[#0f1621]">
+      <div className="absolute inset-0 bg-[radial-gradient(120%_100%_at_18%_0%,rgba(0,178,214,0.32),transparent_58%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(90%_80%_at_100%_100%,rgba(0,178,214,0.12),transparent_60%)]" />
+      <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/45 to-transparent" />
+    </div>
+  );
+}
+
 function appIconFor(id: AppSlotId): ReactNode {
-  switch (id) {
-    case 'newsletter':
-      return (
-        <img src="/app-icons/gmail.png" alt="" width={74} height={74} draggable={false} />
-      );
-    case 'terminal':
-      return (
-        <img src="/app-icons/terminal.png" alt="" width={74} height={74} draggable={false} />
-      );
-    case 'advent':
-      return (
-        <img src="/app-icons/adviento.png" alt="" width={74} height={74} draggable={false} />
-      );
-    case 'projects':
-      return <ProjectsFolderMiniIcon />;
-    case 'github':
-      return <img src="/app-icons/github.png" alt="" width={74} height={74} draggable={false} />;
-    case 'soundcloud':
-      return (
-        <img src="/app-icons/soundcloud.png" alt="" width={74} height={74} draggable={false} />
-      );
-    case 'edits':
-      return (
-        <img src="/app-icons/whatsapp.png" alt="" width={74} height={74} draggable={false} />
-      );
-    default:
-      return null;
-  }
+  if (id === 'projects') return <ProjectsFolderMiniIcon />;
+  return <BlankAppIcon />;
 }
 
 function appMeta(id: AppSlotId): { label: string; bare?: boolean } {
-  switch (id) {
-    case 'newsletter':
-      return { label: 'Newsletter' };
-    case 'terminal':
-      return { label: 'Terminal' };
-    case 'advent':
-      return { label: 'Adviento' };
-    case 'projects':
-      return { label: 'Proyectos' };
-    case 'github':
-      return { label: 'Github', bare: true };
-    case 'soundcloud':
-      return { label: 'SoundCloud' };
-    case 'edits':
-      return { label: 'Whatsapp' };
-    default:
-      return { label: '' };
-  }
+  return { label: HOME_APPS[id].label, bare: true };
 }
 
 type AppDragPreviewProps = Readonly<{ appId: AppSlotId }>;
 
 /** Vista previa semitransparente (misma forma que el icono flotante). */
 function AppDragPreview({ appId }: AppDragPreviewProps) {
-  const bare = appMeta(appId).bare;
   return (
     <>
-      <div
-        className={
-          bare
-            ? 'flex h-[calc(74px*0.81)] w-[calc(74px*0.81)] shrink-0 items-center justify-center overflow-hidden [&_img]:h-full [&_img]:w-full [&_img]:object-cover'
-            : 'flex h-[calc(74px*0.81)] w-[calc(74px*0.81)] shrink-0 items-center justify-center overflow-hidden rounded-[calc(20px*0.81)] bg-white/90 shadow-[0_8px_20px_rgba(0,0,0,0.22)] [&_svg]:h-full [&_img]:h-full [&_img]:w-full [&_img]:object-cover'
-        }
-      >
+      <div className="flex h-[calc(74px*0.81)] w-[calc(74px*0.81)] shrink-0 items-center justify-center overflow-hidden [&_svg]:h-full [&_img]:h-full [&_img]:w-full [&_img]:object-cover">
         {appIconFor(appId)}
       </div>
-      <span className="text-[12px] font-medium leading-none text-neutral-800">
+      <span className="text-[12px] font-medium leading-none text-white/85">
         {appMeta(appId).label}
       </span>
     </>
   );
 }
 
-type HomeScreenGridProps = Readonly<{
-  onOpenAdvent?: () => void;
-  onOpenVibe?: () => void;
-  onOpenZero2Hero?: () => void;
-  onOpenOnAnem?: () => void;
-  openProjectsFolderOnMount?: boolean;
-  onProjectsFolderOpenHandled?: () => void;
-}>;
-
-export default function HomeScreenGrid({
-  onOpenAdvent,
-  onOpenVibe,
-  onOpenZero2Hero,
-  onOpenOnAnem,
-  openProjectsFolderOnMount = false,
-  onProjectsFolderOpenHandled,
-}: HomeScreenGridProps) {
+export default function HomeScreenGrid() {
   const [positions, setPositions] = useState<Record<AppSlotId, CellPos>>(getInitialPositions);
   const [isProjectsFolderOpen, setIsProjectsFolderOpen] = useState(false);
   const [isMobileLayout, setIsMobileLayout] = useState(false);
@@ -184,12 +116,6 @@ export default function HomeScreenGrid({
     const saved = loadSavedPositions();
     if (saved) setPositions(saved);
   }, []);
-
-  useEffect(() => {
-    if (!openProjectsFolderOnMount) return;
-    setIsProjectsFolderOpen(true);
-    onProjectsFolderOpenHandled?.();
-  }, [openProjectsFolderOnMount, onProjectsFolderOpenHandled]);
 
   useEffect(() => {
     const mql = globalThis.matchMedia('(max-width: 767px)');
@@ -437,30 +363,24 @@ export default function HomeScreenGrid({
       >
         <LinkWidget
           variant="profile"
-          caption="Sobre Mi"
+          caption="Sobre Mí"
+          data-testid="profile-widget"
           className="col-span-4 row-span-2 h-full min-h-0 max-md:max-h-[82%] max-md:self-start md:max-h-[90%] md:self-end"
-          profileImage="/foto-joana.png"
-          firstName="Joana"
-          lastName="Castelló"
+          profileImage={SITE.header.avatarImage}
+          firstName={SITE.header.firstName}
+          lastName={SITE.header.lastName}
+          profileSubtitle={SITE.header.subtitle}
+          badge={SITE.header.badge}
         />
 
         <LinkWidget
-          caption="Aprende Vibe Coding"
-          onInternalNavigate={onOpenVibe}
-          aria-label="Aprende Vibe Coding"
+          caption={FEATURED_APP.label}
+          href={FEATURED_APP.href}
+          aria-label={FEATURED_APP.label}
+          data-testid="featured-app-link"
           className="col-start-3 row-start-3 col-span-2 row-span-2 h-full min-h-0"
-          iconSizeMobilePx={MOBILE_VIBE_ICON_SIZE}
-          icon={
-            <img
-              src="/app-icons/sa-logo.png"
-              alt=""
-              className="absolute inset-0 h-full w-full object-cover"
-              width={800}
-              height={800}
-              draggable={false}
-              decoding="async"
-            />
-          }
+          iconSizeMobilePx={MOBILE_FEATURED_ICON_SIZE}
+          icon={<FeaturedAppTile />}
         />
         {allowedCells.map((pos) => {
           const k = posKey(pos);
@@ -490,6 +410,7 @@ export default function HomeScreenGrid({
                   }
                   anchorProps={{
                     ...getHandlers(occupant),
+                    'data-testid': `app-${occupant}-link`,
                     style: { touchAction: 'manipulation' },
                     onClick: (e) => {
                       const wasSkipping = skipClickRef.current;
@@ -504,14 +425,6 @@ export default function HomeScreenGrid({
 
                       if (isProjectsFolderOpen) {
                         setIsProjectsFolderOpen(false);
-                      }
-
-                      if (
-                        occupant === 'advent' &&
-                        onOpenAdvent
-                      ) {
-                        e.preventDefault();
-                        onOpenAdvent();
                       }
                     },
                   }}
@@ -528,11 +441,12 @@ export default function HomeScreenGrid({
             <dialog
               open
               aria-labelledby="projects-folder-title"
+              data-testid="projects-folder-dialog"
               onCancel={(e) => {
                 e.preventDefault();
                 setIsProjectsFolderOpen(false);
               }}
-              className="pointer-events-auto absolute inset-0 z-[120] m-0 flex h-full max-h-none w-full max-w-none items-center justify-center rounded-[34px] border-0 bg-black/25 p-0 backdrop-blur-[24px] transition-opacity duration-220 [-webkit-backdrop-filter:blur(24px)]"
+              className="pointer-events-auto absolute inset-0 z-[120] m-0 flex h-full max-h-none w-full max-w-none items-center justify-center rounded-[34px] border-0 bg-black/45 p-0 backdrop-blur-[24px] transition-opacity duration-220 [-webkit-backdrop-filter:blur(24px)]"
             >
               <div
                 className="flex w-full max-w-[320px] flex-col items-center px-2 transition-transform duration-220 translate-y-0 scale-100"
@@ -540,56 +454,55 @@ export default function HomeScreenGrid({
               >
                 <p
                   id="projects-folder-title"
-                  className="mb-5 w-full text-left text-[30px] font-bold text-white/80"
+                  className="mb-5 w-full text-left text-[30px] font-bold text-white/85"
                 >
                   Proyectos
                 </p>
-                <div className="dock-glass h-[min(320px,calc(100vw-2rem))] w-[min(320px,calc(100vw-2rem))] rounded-[30px] border border-white/40 shadow-[0_18px_42px_rgba(0,0,0,0.28)] backdrop-blur-[24px]">
+                <div className="dock-glass h-[min(320px,calc(100vw-2rem))] w-[min(320px,calc(100vw-2rem))] rounded-[30px] border border-white/15 shadow-[0_18px_42px_rgba(0,0,0,0.5)] backdrop-blur-[24px]">
                   <div className="grid h-full w-full place-items-center px-4 pb-3 pt-1">
-                    <div className="grid h-[292px] w-[256px] grid-cols-3 grid-rows-3 place-items-center gap-x-3 gap-y-2">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setIsProjectsFolderOpen(false);
-                          onOpenZero2Hero?.();
-                        }}
-                        className="flex h-[82px] w-[72px] flex-col items-center justify-start gap-1 rounded-xl p-1.5 transition-colors hover:bg-white/10"
+                    {PROJECTS.length === 0 ? (
+                      <div
+                        className="flex flex-col items-center justify-center gap-2 px-6 text-center"
+                        data-testid="projects-empty-state"
                       >
-                        <div className="h-[56px] w-[56px] shrink-0 aspect-square overflow-hidden rounded-[13px] shadow-[0_6px_14px_rgba(0,0,0,0.2)]">
-                          <img
-                            src="/zero2hero/zero2hero-icon.png"
-                            alt=""
-                            width={128}
-                            height={128}
-                            decoding="async"
-                            draggable={false}
-                            className="size-full aspect-square object-contain object-center"
-                          />
-                        </div>
-                        <span className="text-[10px] font-medium leading-none text-neutral-800">Zero2Hero</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setIsProjectsFolderOpen(false);
-                          onOpenOnAnem?.();
-                        }}
-                        className="flex h-[82px] w-[72px] flex-col items-center justify-start gap-1 rounded-xl p-1.5 transition-colors hover:bg-white/10"
-                      >
-                        <div className="h-[56px] w-[56px] shrink-0 aspect-square overflow-hidden rounded-[13px] shadow-[0_6px_14px_rgba(0,0,0,0.2)]">
-                          <img
-                            src="/onanem/onanem-icon.png"
-                            alt=""
-                            width={128}
-                            height={128}
-                            decoding="async"
-                            draggable={false}
-                            className="size-full aspect-square object-contain object-center"
-                          />
-                        </div>
-                        <span className="text-[10px] font-medium leading-none text-neutral-800">On Anem</span>
-                      </button>
-                    </div>
+                        <p className="text-sm font-semibold text-white/75">Aún no hay proyectos</p>
+                        <p className="text-xs leading-relaxed text-white/45">
+                          Añade los tuyos (icono, nombre y enlace) desde{' '}
+                          <span className="text-[#4fd8f2]">siteConfig.ts</span>.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="grid h-[292px] w-[256px] grid-cols-3 grid-rows-3 place-items-center gap-x-3 gap-y-2 self-start">
+                        {PROJECTS.map((project) => (
+                          <a
+                            key={project.label}
+                            href={project.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex h-[82px] w-[72px] flex-col items-center justify-start gap-1 rounded-xl p-1.5 transition-colors hover:bg-white/10"
+                          >
+                            <div className="h-[56px] w-[56px] shrink-0 overflow-hidden rounded-[13px] border border-white/10 shadow-[0_6px_14px_rgba(0,0,0,0.35)]">
+                              {project.iconSrc ? (
+                                <img
+                                  src={project.iconSrc}
+                                  alt=""
+                                  width={128}
+                                  height={128}
+                                  decoding="async"
+                                  draggable={false}
+                                  className="size-full object-cover"
+                                />
+                              ) : (
+                                <div className="h-full w-full bg-[#131b28]" />
+                              )}
+                            </div>
+                            <span className="text-[10px] font-medium leading-none text-white/80">
+                              {project.label}
+                            </span>
+                          </a>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

@@ -6,7 +6,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['Manrope', 'system-ui', 'sans-serif'],
         mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
       },
       colors: {
@@ -16,6 +16,10 @@ export default {
         card: 'hsl(var(--card))',
         muted: 'hsl(var(--muted))',
         primary: 'hsl(var(--primary))',
+        accent: '#00B2D6',
+      },
+      fontSize: {
+        xxl: ['1.6rem', { lineHeight: '1.15' }],
       },
       boxShadow: {
         phone: '0 30px 70px rgba(0, 0, 0, 0.35)',

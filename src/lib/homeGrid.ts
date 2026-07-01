@@ -7,14 +7,9 @@ export const GRID_COLS = 4;
  */
 export const CSS_DESKTOP_HOME_APP_ROW_HEIGHT = 'calc(74px * 0.81 + 0.5rem + 12px)';
 
-export type AppSlotId =
-  | 'newsletter'
-  | 'terminal'
-  | 'advent'
-  | 'projects'
-  | 'github'
-  | 'soundcloud'
-  | 'edits';
+export type AppSlotId = 'acceso' | 'projects' | 'asesoria' | 'contacto';
+
+const APP_SLOT_COUNT = 4;
 
 export type CellPos = { row: number; col: number };
 
@@ -22,7 +17,7 @@ export function posKey(p: CellPos): string {
   return `${p.row},${p.col}`;
 }
 
-/** Celdas donde pueden vivir apps (0-based). Filas 1–2 = perfil; (fila 3–4, col 3–4) = widget SA. */
+/** Celdas donde pueden vivir apps (0-based). Filas 1–2 = perfil; (fila 3–4, col 3–4) = app grande. */
 export function isAppCellAllowed(row: number, col: number): boolean {
   if (row < 0 || row >= GRID_ROWS || col < 0 || col >= GRID_COLS) return false;
   if (row < 2) return false;
@@ -42,48 +37,11 @@ export function listAllowedCells(): CellPos[] {
 
 export function getInitialPositions(): Record<AppSlotId, CellPos> {
   return {
-    newsletter: { row: 2, col: 0 },
-    terminal: { row: 2, col: 1 },
-    advent: { row: 3, col: 0 },
-    projects: { row: 3, col: 1 },
-    /** Fila 4 del grid (0-based) vacía a propósito: separa bloque central y dock inferior. */
-    edits: { row: 5, col: 0 },
-    github: { row: 5, col: 2 },
-    soundcloud: { row: 5, col: 3 },
+    acceso: { row: 2, col: 0 },
+    projects: { row: 2, col: 1 },
+    asesoria: { row: 3, col: 0 },
+    contacto: { row: 3, col: 1 },
   };
-}
-
-function isSamePos(a: CellPos, b: CellPos): boolean {
-  return a.row === b.row && a.col === b.col;
-}
-
-/**
- * Layout por defecto anterior (antes del ajuste visual pedido).
- * Si detectamos exactamente este patrón, lo migramos al nuevo default.
- */
-function isLegacyDefaultLayout(positions: Record<AppSlotId, CellPos>): boolean {
-  return (
-    isSamePos(positions.newsletter, { row: 2, col: 0 }) &&
-    isSamePos(positions.terminal, { row: 2, col: 1 }) &&
-    isSamePos(positions.advent, { row: 3, col: 0 }) &&
-    isSamePos(positions.projects, { row: 3, col: 1 }) &&
-    isSamePos(positions.github, { row: 4, col: 0 }) &&
-    isSamePos(positions.soundcloud, { row: 4, col: 1 }) &&
-    isSamePos(positions.edits, { row: 5, col: 0 })
-  );
-}
-
-/** Default anterior: dock inferior en fila 4 (sin fila vacía); migra al default con fila 4 vacía. */
-function isSupersededDefaultBottomRow4(positions: Record<AppSlotId, CellPos>): boolean {
-  return (
-    isSamePos(positions.newsletter, { row: 2, col: 0 }) &&
-    isSamePos(positions.terminal, { row: 2, col: 1 }) &&
-    isSamePos(positions.advent, { row: 3, col: 0 }) &&
-    isSamePos(positions.projects, { row: 3, col: 1 }) &&
-    isSamePos(positions.edits, { row: 4, col: 0 }) &&
-    isSamePos(positions.github, { row: 4, col: 2 }) &&
-    isSamePos(positions.soundcloud, { row: 4, col: 3 })
-  );
 }
 
 function buildOccupancy(
@@ -155,7 +113,7 @@ function displaceOccupantToNearestFree(
 }
 
 /**
- * Coloca `appId` en `target`. Si estaba ocupado, desplaza la otra app a la celda libre más cercana (BFS desde vecinos del destino).
+ * Coloca `appId` en `target`. Si estaba ocupado, desplaza la otra app a la celda libre más cercana.
  */
 export function tryMoveApp(
   positions: Record<AppSlotId, CellPos>,
@@ -190,7 +148,7 @@ function registerUniqueAllowedCell(p: CellPos | undefined, seen: Set<string>): b
 
 export function positionsAreValid(positions: Record<AppSlotId, CellPos>): boolean {
   const ids = Object.keys(positions) as AppSlotId[];
-  if (ids.length !== 7) return false;
+  if (ids.length !== APP_SLOT_COUNT) return false;
   const seen = new Set<string>();
   for (const id of ids) {
     if (!registerUniqueAllowedCell(positions[id], seen)) return false;
@@ -198,13 +156,11 @@ export function positionsAreValid(positions: Record<AppSlotId, CellPos>): boolea
   return true;
 }
 
-const STORAGE_KEY = 'links-os-home-app-positions';
+const STORAGE_KEY = 'bidaia-os-home-app-positions';
 
 function parseStoredPositions(raw: string): Record<AppSlotId, CellPos> | null {
   const parsed = JSON.parse(raw) as Record<AppSlotId, CellPos>;
   if (!positionsAreValid(parsed)) return null;
-  if (isLegacyDefaultLayout(parsed)) return null;
-  if (isSupersededDefaultBottomRow4(parsed)) return null;
   return parsed;
 }
 

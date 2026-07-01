@@ -1,0 +1,8 @@
+{
+  "name": "bidaia-frontend-runner",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "start": "cd /app && exec yarn start"
+  }
+}

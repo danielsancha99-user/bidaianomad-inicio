@@ -171,4 +171,11 @@ function subscribeApiPlugin(): Plugin {
 // https://vite.dev/config/
 export default defineConfig(() => ({
   plugins: [react(), subscribeApiPlugin()],
+  server: {
+    host: true,
+    port: 3000,
+    strictPort: true,
+    allowedHosts: true as const,
+    hmr: { clientPort: 443, protocol: 'wss' },
+  },
 }));

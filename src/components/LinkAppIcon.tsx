@@ -21,7 +21,9 @@ type LinkAppIconProps = Readonly<{
   /** Sin caja blanca/redondeada alrededor del icono */
   bare?: boolean;
   /** Atributos extra en el `<a>` (p. ej. handlers de arrastre en la home) */
-  anchorProps?: Omit<ComponentProps<'a'>, 'href' | 'children' | 'className' | 'target' | 'rel'>;
+  anchorProps?: Omit<ComponentProps<'a'>, 'href' | 'children' | 'className' | 'target' | 'rel'> & {
+    'data-testid'?: string;
+  };
 }>;
 
 export default function LinkAppIcon({
@@ -42,7 +44,7 @@ export default function LinkAppIcon({
       {...anchorProps}
     >
       <div className={`${frameClass} transition-transform duration-200 group-active:scale-95`}>{icon}</div>
-      <span className="shrink-0 text-center text-[12px] font-medium leading-none text-neutral-800">
+      <span className="shrink-0 text-center text-[12px] font-medium leading-none text-white/75">
         {label}
       </span>
     </a>

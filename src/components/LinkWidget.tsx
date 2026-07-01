@@ -10,15 +10,24 @@ type LinkWidgetProps = Readonly<{
   className?: string;
   'aria-label'?: string;
   variant?: 'default' | 'profile';
-  /** Foto del avatar circular (variante profile). */
+  /** Foto del avatar circular (variante profile). Vacío → iniciales. */
   profileImage?: string;
   firstName?: string;
   lastName?: string;
   /** Subtítulo bajo el nombre (variante profile). */
   profileSubtitle?: string;
+  /** Etiqueta (pill) bajo el subtítulo (variante profile). */
+  badge?: string;
   /** Tamaño del bloque cuadrado principal en mobile (px). */
   iconSizeMobilePx?: number;
+  'data-testid'?: string;
 }>;
+
+function getInitials(firstName: string, lastName: string): string {
+  const a = firstName.trim()[0] ?? '';
+  const b = lastName.trim()[0] ?? '';
+  return `${a}${b}`.toUpperCase();
+}
 
 export default function LinkWidget({
   caption,
@@ -28,48 +37,56 @@ export default function LinkWidget({
   className = '',
   'aria-label': ariaLabel,
   variant = 'default',
-  profileImage = '/foto-joana.png',
-  firstName = 'Joana',
-  lastName = 'Castelló',
-  profileSubtitle = 'Ingeniera · Creadora · DJ',
+  profileImage = '',
+  firstName = 'Daniel',
+  lastName = 'Sancha',
+  profileSubtitle = 'Creador de BidaiaNomad · Asesoría de Viajes',
+  badge = 'Viajes auténticos',
   iconSizeMobilePx,
+  'data-testid': dataTestId,
 }: LinkWidgetProps) {
   const profileShellClass = `flex h-full min-h-0 min-w-0 flex-col justify-start gap-2 px-[5px] ${className}`;
   const linkShellClass = `group flex h-full min-h-0 min-w-0 w-full flex-col items-end justify-start gap-2 px-[5px] md:justify-start ${className}`;
 
   const body =
     variant === 'profile' ? (
-      <div className="flex h-full min-h-0 w-full min-w-0 flex-1 items-center justify-start gap-7 rounded-[22px] bg-[#3e3b36] py-5 pl-5 pr-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] max-md:gap-4 max-md:py-3 max-md:pl-4 max-md:pr-3">
-        <div className="size-[76px] shrink-0 overflow-hidden rounded-full shadow-[0_1px_2px_rgba(0,0,0,0.12)] max-md:size-[62px]">
-          <img
-            src={profileImage}
-            alt=""
-            width={152}
-            height={152}
-            decoding="async"
-            draggable={false}
-            className="h-full w-full object-cover"
-          />
+      <div className="flex h-full min-h-0 w-full min-w-0 flex-1 items-center justify-start gap-7 rounded-[22px] border border-white/10 bg-[#0f1621] py-5 pl-5 pr-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_18px_40px_rgba(0,0,0,0.4)] max-md:gap-4 max-md:py-3 max-md:pl-4 max-md:pr-3">
+        <div className="size-[76px] shrink-0 overflow-hidden rounded-full border border-white/10 shadow-[0_1px_2px_rgba(0,0,0,0.35)] max-md:size-[62px]">
+          {profileImage ? (
+            <img
+              src={profileImage}
+              alt=""
+              width={152}
+              height={152}
+              decoding="async"
+              draggable={false}
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center bg-[radial-gradient(120%_120%_at_30%_10%,rgba(0,178,214,0.45),#0b1520)] font-sans text-2xl font-semibold tracking-tight text-white max-md:text-xl">
+              {getInitials(firstName, lastName)}
+            </div>
+          )}
         </div>
         <div className="flex min-w-0 flex-1 flex-col gap-1.5 text-left">
-          <p className="font-sans text-xxl font-semibold leading-tight tracking-tight text-white">
+          <p
+            className="font-sans text-xxl font-semibold leading-tight tracking-tight text-white"
+            data-testid="profile-name"
+          >
             {firstName} {lastName}
           </p>
-          <p className="font-sans text-sm font-medium leading-snug text-white/50">
+          <p className="font-sans text-sm font-medium leading-snug text-white/55">
             {profileSubtitle}
           </p>
           <div className="mt-0.5 flex min-w-0 flex-wrap items-center gap-2">
-            <span className="inline-flex rounded-full bg-[#5a3e35] px-3 py-1 font-sans text-sm font-semibold leading-none text-[#ff7c4d]">
-              Vibe Coding
-            </span>
-            <span className="inline-flex rounded-full bg-[#4d4a45] px-3 py-1 font-sans text-sm font-semibold leading-none text-white/85">
-              IA
+            <span className="inline-flex rounded-full bg-[#00B2D6]/15 px-3 py-1 font-sans text-sm font-semibold leading-none text-[#4fd8f2] ring-1 ring-inset ring-[#00B2D6]/30">
+              {badge}
             </span>
           </div>
         </div>
       </div>
     ) : (
-      <div className="link-widget-vibe-square relative min-w-0 shrink-0 overflow-hidden rounded-[26px] shadow-[0_14px_30px_rgba(0,0,0,0.12)] transition-transform duration-200 group-active:scale-[0.98] max-md:aspect-square max-md:w-[var(--vibe-icon-size,128px)] max-md:self-end">
+      <div className="link-widget-vibe-square relative min-w-0 shrink-0 overflow-hidden rounded-[26px] shadow-[0_18px_40px_rgba(0,0,0,0.45)] transition-transform duration-200 group-active:scale-[0.98] max-md:aspect-square max-md:w-[var(--vibe-icon-size,128px)] max-md:self-end">
         {icon}
       </div>
     );
@@ -78,8 +95,8 @@ export default function LinkWidget({
     <span
       className={
         variant === 'profile'
-          ? 'max-md:-mb-6 shrink-0 text-center text-xs font-medium leading-none text-neutral-800'
-          : 'link-widget-vibe-caption shrink-0 text-[12px] font-medium leading-none text-neutral-800 max-md:w-[var(--vibe-icon-size,128px)] max-md:self-end max-md:text-center'
+          ? 'max-md:-mb-6 shrink-0 text-center text-xs font-medium leading-none text-white/70'
+          : 'link-widget-vibe-caption shrink-0 text-[12px] font-medium leading-none text-white/75 max-md:w-[var(--vibe-icon-size,128px)] max-md:self-end max-md:text-center'
       }
     >
       {caption}
@@ -93,7 +110,7 @@ export default function LinkWidget({
 
   if (variant === 'profile') {
     return (
-      <fieldset className={`${profileShellClass} m-0 min-w-0 border-0 p-0`}>
+      <fieldset className={`${profileShellClass} m-0 min-w-0 border-0 p-0`} data-testid={dataTestId}>
         <legend className="sr-only">
           {firstName} {lastName}
         </legend>
@@ -109,6 +126,7 @@ export default function LinkWidget({
         type="button"
         onClick={onInternalNavigate}
         aria-label={ariaLabel ?? caption}
+        data-testid={dataTestId}
         className={`${linkShellClass} cursor-pointer border-0 bg-transparent p-0 text-inherit`}
         style={mobileIconSizeStyle}
       >
@@ -124,6 +142,7 @@ export default function LinkWidget({
       target="_blank"
       rel="noopener noreferrer"
       aria-label={ariaLabel}
+      data-testid={dataTestId}
       className={linkShellClass}
       style={mobileIconSizeStyle}
     >
