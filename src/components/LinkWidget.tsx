@@ -4,8 +4,6 @@ type LinkWidgetProps = Readonly<{
   caption: string;
   /** Omitido en `variant="profile"` (no hay enlace). */
   href?: string;
-  /** Abre una vista interna (sin `target="_blank"`). Requiere `aria-label` si no hay texto visible único. */
-  onInternalNavigate?: () => void;
   icon?: ReactNode;
   className?: string;
   'aria-label'?: string;
@@ -32,7 +30,6 @@ function getInitials(firstName: string, lastName: string): string {
 export default function LinkWidget({
   caption,
   href,
-  onInternalNavigate,
   icon,
   className = '',
   'aria-label': ariaLabel,
@@ -117,22 +114,6 @@ export default function LinkWidget({
         {body}
         {footer}
       </fieldset>
-    );
-  }
-
-  if (onInternalNavigate) {
-    return (
-      <button
-        type="button"
-        onClick={onInternalNavigate}
-        aria-label={ariaLabel ?? caption}
-        data-testid={dataTestId}
-        className={`${linkShellClass} cursor-pointer border-0 bg-transparent p-0 text-inherit`}
-        style={mobileIconSizeStyle}
-      >
-        {body}
-        {footer}
-      </button>
     );
   }
 
